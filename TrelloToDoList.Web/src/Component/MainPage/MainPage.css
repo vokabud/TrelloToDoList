@@ -1,0 +1,11 @@
+.main-page {
+  margin: 0 auto;
+  max-width: 500px;
+  width: 100%;  
+
+  border: 1px solid gray;
+}
+
+h1 {
+  color: green;
+}

@@ -1,6 +1,7 @@
 import React from 'react';
 import './MainPage.css';
 import UserName from '../UserName/UserName';
+import TaskList from '../TaskList/TaskList';
 
 class MainPage extends React.Component {
   render() {
@@ -10,9 +11,7 @@ class MainPage extends React.Component {
             Trello ToDo List
           </h1>
           <UserName name="User Name"/>
-          <div>
-            List of tasks;
-          </div>
+          <TaskList />
         </div>);
   }
 }

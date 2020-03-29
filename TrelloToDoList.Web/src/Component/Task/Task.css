@@ -1,0 +1,14 @@
+.task {
+  width: 100%; 
+  
+  margin-top: 5px;
+}
+
+/*TODO: add gray hower */
+/*TODO: add style for task */
+/*TODO: cursor */
+/*TODO: marked state */
+
+.task .task-name {
+  margin-left: 5px;
+}

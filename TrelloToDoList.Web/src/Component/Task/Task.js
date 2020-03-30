@@ -5,10 +5,10 @@ import './Task.css';
 
 class Task extends React.Component {
   render() {
-      return ( 
-        <div class="task">
+      return (
+        <div className="task">
           <input type="checkbox" />
-          <span class="task-name">
+          <span className="task-name">
             {this.props.name}
           </span>
         </div>);

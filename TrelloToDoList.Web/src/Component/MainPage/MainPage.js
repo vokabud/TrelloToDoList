@@ -6,7 +6,7 @@ import TaskList from '../TaskList/TaskList';
 class MainPage extends React.Component {
   render() {
       return ( 
-        <div class="main-page">
+        <div className="main-page">
           <h1>
             Trello ToDo List
           </h1>

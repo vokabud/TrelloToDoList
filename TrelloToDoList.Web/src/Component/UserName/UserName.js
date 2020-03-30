@@ -4,7 +4,7 @@ import './UserName.css';
 class UserName extends React.Component {
   render() {
       return ( 
-          <div class="user-name">
+          <div className="user-name">
             <p>
               User: <span>{this.props.name}</span> 
             </p>

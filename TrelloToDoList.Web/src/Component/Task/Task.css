@@ -1,13 +1,26 @@
 .task {
-  width: 100%; 
+  width: 100%;
+
+  padding: 6px 8px 2px;
+  margin-bottom: 8px;
+
+  border-radius: 3px;
+
+  box-shadow: 0 1px 0 rgba(9,30,66,.25);
+
+  cursor: pointer;
   
-  margin-top: 5px;
+  background-color: #fff;
+
+  font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Noto Sans,Ubuntu,Droid Sans,Helvetica Neue,sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
 }
 
-/*TODO: add gray hower */
-/*TODO: add style for task */
-/*TODO: cursor */
-/*TODO: marked state */
+.task:hover {
+  background-color: #f4f5f7;
+}
 
 .task .task-name {
   margin-left: 5px;

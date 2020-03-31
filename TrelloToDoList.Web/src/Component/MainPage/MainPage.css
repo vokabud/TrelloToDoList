@@ -1,8 +1,14 @@
-.main-page {
-  margin: 0 auto;
+.page {
+  background-color: #0079bf;
+
+  min-height: 100vh;
+}
+
+.content {
+  margin: 5px auto;
   padding: 5px;
   max-width: 500px;
-  min-height: 100vh;
+  min-height: calc(100% - 30px);
   width: 100%;  
 
   background-color: #ebecf0;
@@ -14,8 +20,4 @@
   font-size: 14px;
   line-height: 20px;
   font-weight: 400;
-}
-
-h1 {
-  color: #0079bf;
 }

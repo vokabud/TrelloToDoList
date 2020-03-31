@@ -1,0 +1,11 @@
+header {
+    background: rgba(0,0,0,.32);
+    text-align: center;
+}
+
+header span {
+    color: #fff;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+}

@@ -1,6 +1,5 @@
 import React from 'react';
 import './MainPage.css';
-import UserName from '../UserName/UserName';
 import TaskList from '../TaskList/TaskList';
 import Header from '../Header/Header';
 
@@ -10,7 +9,6 @@ class MainPage extends React.Component {
         <div className="page">
           <Header/>
           <main className="content">
-            <UserName name="User Name"/>
             <TaskList />
           </main>
         </div>);

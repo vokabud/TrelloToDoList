@@ -1,11 +1,15 @@
 header {
     background: rgba(0,0,0,.32);
     text-align: center;
+
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
 }
 
-header span {
+header .app-name {
     color: #fff;
     font-style: normal;
     font-weight: 400;
     font-size: 20px;
+    line-height: 40px;
 }

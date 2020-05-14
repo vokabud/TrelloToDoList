@@ -1,0 +1,5 @@
+TrelloToDoList.TaskManagement/TaskManagement/.vs/
+TrelloToDoList.TaskManagement/TaskManagement/TaskManagementApi/bin/
+TrelloToDoList.TaskManagement/TaskManagement/TaskManagementApi/obj/TaskManagementApi.csproj.nuget.cache
+TrelloToDoList.TaskManagement/TaskManagement/TaskManagementApi/obj/
+*.user

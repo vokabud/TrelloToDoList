@@ -1,15 +1,8 @@
-﻿namespace TaskManagementApi.Models
+﻿namespace TaskManagementApi.Database.Entities
 {
-    /// <summary>
-    /// Task.
-    /// </summary>
-    public class TaskItem
+    [BsonCollection("tasks")]
+    public class TaskEntity : BaseEntity
     {
-        /// <summary>
-        /// Task id.
-        /// </summary>
-        public string Id { get; set; }
-
         /// <summary>
         /// Title.
         /// </summary>

@@ -30,22 +30,12 @@ namespace TaskManagementApi.Database
                 .ToEnumerable();
         }
 
-        public TEntity FindById(string id)
-        {
-            var objectId = new ObjectId(id);
-            var filter = Builders<TEntity>
-                .Filter
-                .Eq(doc => doc.Id, objectId);
-
-            return collection
-                .Find(filter)
-                .SingleOrDefault();
-        }
-
-        public void Insert(TEntity document)
+        public ObjectId Insert(TEntity document)
         {
             collection
                 .InsertOne(document);
+
+            return document.Id;
         }
 
         public void Replace(TEntity document)
@@ -58,12 +48,11 @@ namespace TaskManagementApi.Database
                 .FindOneAndReplace(filter, document);
         }
 
-        public void DeleteById(string id)
+        public void DeleteById(ObjectId id)
         {
-            var objectId = new ObjectId(id);
             var filter = Builders<TEntity>
                 .Filter
-                .Eq(doc => doc.Id, objectId);
+                .Eq(doc => doc.Id, id);
 
             collection
                 .FindOneAndDelete(filter);

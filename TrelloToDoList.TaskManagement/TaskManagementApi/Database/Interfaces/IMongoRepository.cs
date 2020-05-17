@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using MongoDB.Bson;
 
 namespace TaskManagementApi.Database.Interfaces
 {
@@ -11,13 +12,11 @@ namespace TaskManagementApi.Database.Interfaces
         IEnumerable<TEntity> FilterBy(
             Expression<Func<TEntity, bool>> filterExpression);
 
-        TEntity FindById(string id);
-
-        void Insert(TEntity document);
+        ObjectId Insert(TEntity document);
 
         void Replace(TEntity document);
 
-        void DeleteById(string id);
+        void DeleteById(ObjectId id);
 
         IQueryable<TEntity> AsQueryable();
     }

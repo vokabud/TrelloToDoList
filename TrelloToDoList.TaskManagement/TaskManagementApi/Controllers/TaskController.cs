@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Bson;
-using TaskManagementApi.Database.Entities;
-using TaskManagementApi.Database.Interfaces;
-using TaskManagementApi.Models;
+using TaskManagementApi.Functions;
+using TaskManagementApi.Models.Requests;
+using TaskManagementApi.Models.Responses;
 
 namespace TaskManagementApi.Controllers
 {
@@ -12,72 +12,99 @@ namespace TaskManagementApi.Controllers
     [ApiController]
     public class TaskController : ControllerBase
     {
-        private readonly IMongoRepository<TaskEntity> taskRepository;
+        private readonly CreateTaskFunc createTaskFunc;
+        private readonly DeleteTaskFunc deleteTaskFunc;
+        private readonly GetAllTasksFunc getAllTasksFunc;
+        private readonly GetTaskByIdFunc getTaskByIdFunc;
+        private readonly UpdateTaskFunc updateTaskFunc;
 
         public TaskController(
-            IMongoRepository<TaskEntity> taskRepository)
+            CreateTaskFunc createTaskFunc,
+            DeleteTaskFunc deleteTaskFunc,
+            GetAllTasksFunc getAllTasksFunc, 
+            GetTaskByIdFunc getTaskByIdFunc, 
+            UpdateTaskFunc updateTaskFunc)
         {
-            this.taskRepository = taskRepository;
+            this.createTaskFunc = createTaskFunc;
+            this.deleteTaskFunc = deleteTaskFunc;
+            this.getAllTasksFunc = getAllTasksFunc;
+            this.getTaskByIdFunc = getTaskByIdFunc;
+            this.updateTaskFunc = updateTaskFunc;
         }
 
-        // GET: api/Task
+        /// <summary>
+        /// GET: api/task
+        /// </summary>
         [HttpGet]
-        public IEnumerable<TaskItem> GetAll()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public ActionResult<IEnumerable<TaskResponse>> GetAll()
         {
-            return taskRepository
-                .AsQueryable()
-                .Select(
-                    task => new TaskItem
-                    {
-                        Description = task.Description, 
-                        Title = task.Title, 
-                        Id = task.Id.ToString()
-                    });
+            var tasks = getAllTasksFunc
+                .Invoke();
+
+            return Ok(tasks);
         }
 
-        // GET: api/Task/5
-        [HttpGet("{id}", Name = "Get")]
-        public TaskItem Get(string id)
+        /// <summary>
+        /// GET: api/task/5
+        /// </summary>
+        /// <param name="id">Task id.</param>
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<TaskResponse> Get(
+            string id)
         {
-            var task = taskRepository
-                .FindById(id);
-
-            return new TaskItem
+            try
             {
-                Title = task.Title,
-                Description = task.Description,
-                Id = task.Id.ToString()
-            };
+                var task = getTaskByIdFunc
+                    .Invoke(id);
+
+                return Ok(task);
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound();
+            }
         }
 
-        // POST: api/Task
+        /// <summary>
+        /// POST: api/task
+        /// </summary>
+        /// <param name="taskRequest">Create task request.</param>
         [HttpPost]
-        public void Post([FromBody] TaskItem value)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public ActionResult<string> Post(
+            [FromBody] CreateTaskRequest taskRequest)
         {
-            taskRepository.Insert(new TaskEntity
-            {
-                Description = value.Description,
-                Title = value.Title
-            });
+            var taskId = createTaskFunc.Invoke(taskRequest);
+
+            return Created(".", taskId);
         }
 
-        // PUT: api/Task/5
-        [HttpPut("{id}")]
-        public void Put(string id, [FromBody] TaskItem value)
+        /// <summary>
+        /// PUT: api/task/5
+        /// </summary>
+        /// <param name="updateTaskRequest">Update task request.</param>
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public ActionResult Put(
+            [FromBody] UpdateTaskRequest updateTaskRequest)
         {
-            taskRepository.Replace(new TaskEntity
-            {
-                Title = value.Title,
-                Description = value.Description,
-                Id = new ObjectId(id)
-            });
+            updateTaskFunc.Invoke(updateTaskRequest);
+            return Ok();
         }
 
-        // DELETE: api/ApiWithActions/5
+        /// <summary>
+        ///  DELETE: api/task/5
+        /// </summary>
+        /// <param name="id">Task id.</param>
         [HttpDelete("{id}")]
-        public void Delete(string id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public ActionResult Delete(string id)
         {
-            taskRepository.DeleteById(id);
+            deleteTaskFunc.Invoke(id);
+            return Ok();
         }
     }
 }

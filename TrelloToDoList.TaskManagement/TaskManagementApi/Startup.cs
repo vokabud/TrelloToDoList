@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using TaskManagementApi.Database;
 using TaskManagementApi.Database.Interfaces;
+using TaskManagementApi.Functions;
 
 namespace TaskManagementApi
 {
@@ -19,7 +20,8 @@ namespace TaskManagementApi
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        // This method gets called by the runtime.
+        // Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<MongoDbSettings>(Configuration.GetSection("MongoDbSettings"));
@@ -27,23 +29,32 @@ namespace TaskManagementApi
             services.AddSingleton<IMongoDbSettings>(serviceProvider =>
                 serviceProvider.GetRequiredService<IOptions<MongoDbSettings>>().Value);
 
-            services.AddScoped(
-                typeof(IMongoRepository<>), 
+            services.AddSingleton(
+                typeof(IMongoRepository<>),
                 typeof(MongoRepository<>));
 
-            services.AddControllers();
+            services.AddSingleton<CreateTaskFunc>();
+            services.AddSingleton<UpdateTaskFunc>();
+            services.AddSingleton<GetAllTasksFunc>();
+            services.AddSingleton<GetTaskByIdFunc>();
+            services.AddSingleton<DeleteTaskFunc>();
 
+            services
+                .AddControllers()
+                .AddNewtonsoftJson();
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "My API",
+                    Title = "Task management API",
                     Version = "v1"
                 });
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        // This method gets called by the runtime.
+        // Use this method to configure the HTTP request pipeline.
         public void Configure(
             IApplicationBuilder app, 
             IWebHostEnvironment env)
@@ -53,14 +64,13 @@ namespace TaskManagementApi
                 app.UseDeveloperExceptionPage();
             }
 
-            // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
 
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
-            // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.SwaggerEndpoint(
+                    url: "/swagger/v1/swagger.json", 
+                    name: "Task management API");
             });
 
             app.UseHttpsRedirection();
